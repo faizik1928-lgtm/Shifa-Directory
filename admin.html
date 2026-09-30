@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel – Shifa Directory</title>
+  <meta name="robots" content="noindex" />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="main.css" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0FA3A3" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+</head>
+<body>
+
+<!-- Login Screen -->
+<div id="loginScreen" class="login-page">
+  <div class="login-box">
+    <div class="login-logo">
+      <div style="font-size:3rem;margin-bottom:8px;">🏥</div>
+      <h2>Admin Panel</h2>
+      <p>Sign in to manage Shifa Directory</p>
+    </div>
+    <form class="login-form" id="loginForm">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="adminUser" placeholder="admin" autocomplete="username" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="adminPass" placeholder="••••••••" autocomplete="current-password" />
+      </div>
+      <p id="loginError" style="color:var(--danger);font-size:0.82rem;display:none;">Invalid credentials. Please check your username and password.</p>
+      <button type="submit" class="btn-login">🔐 Sign In</button>
+      <p style="font-size:0.75rem;color:var(--muted);text-align:center;margin-top:8px;">Shifa Directory Admin Portal</p>
+    </form>
+  </div>
+</div>
+
+<!-- Admin Dashboard (hidden until login) -->
+<div id="adminDashboard" style="display:none;">
+
+  <!-- Mini Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <div class="logo-icon">🏥</div>
+        <span class="logo-text">Shifa <span>Admin</span></span>
+      </a>
+      <div style="flex:1"></div>
+      <div class="header-actions">
+        <a href="index.html" style="font-size:0.85rem;font-weight:600;color:var(--primary);margin-right:8px;">← Public Site</a>
+        <button id="logoutBtn" class="emergency-btn" style="background:#fdeded;border-color:#f5b7b7;color:var(--danger);">🚪 Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="admin-layout">
+    <!-- SIDEBAR -->
+    <nav class="admin-sidebar">
+      <h2>⚙️ Management</h2>
+      <div class="admin-nav-item active" data-section="dashboard">📊 Dashboard</div>
+      <div class="admin-nav-item" data-section="doctors">👨‍⚕️ Doctors</div>
+      <div class="admin-nav-item" data-section="specialties">🏷️ Specialties</div>
+      <div class="admin-nav-item" data-section="cities">🏙️ Cities</div>
+    </nav>
+
+    <!-- CONTENT AREA -->
+    <div class="admin-content">
+
+      <!-- DASHBOARD -->
+      <section class="admin-section active" id="section-dashboard">
+        <h2 class="admin-section-title">📊 Dashboard Overview</h2>
+        <div class="stats-grid" id="statsGrid"></div>
+        <div class="admin-table-wrap">
+          <div class="admin-table-header">
+            <h3>Recent Doctors</h3>
+          </div>
+          <table class="data-table" id="recentDoctorsTable">
+            <thead>
+              <tr>
+                <th>Name</th><th>Specialty</th><th>City</th><th>Fee</th><th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="recentDoctorsBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- DOCTORS -->
+      <section class="admin-section" id="section-doctors">
+        <h2 class="admin-section-title">👨‍⚕️ Manage Doctors</h2>
+        <!-- Search & Add -->
+        <div style="display:flex;gap:12px;margin-bottom:20px;align-items:center;flex-wrap:wrap;">
+          <input type="text" class="filter-input" id="adminDocSearch" placeholder="🔍 Search doctors…" style="max-width:300px;flex:1;" />
+          <button class="btn-add" id="addDoctorBtn">➕ Add Doctor</button>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="data-table" id="doctorsTable">
+            <thead>
+              <tr>
+                <th>Name</th><th>Specialty</th><th>City</th><th>Hospital</th><th>Fee</th><th>Status</th><th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="doctorsTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SPECIALTIES -->
+      <section class="admin-section" id="section-specialties">
+        <h2 class="admin-section-title">🏷️ Manage Specialties</h2>
+        <div class="admin-table-wrap">
+          <div class="admin-table-header">
+            <h3>All Specialties</h3>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr><th>Icon</th><th>Name</th><th>Slug</th><th>Doctors</th></tr>
+            </thead>
+            <tbody id="specialtiesTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- CITIES -->
+      <section class="admin-section" id="section-cities">
+        <h2 class="admin-section-title">🏙️ Manage Cities</h2>
+        <div class="admin-table-wrap">
+          <div class="admin-table-header">
+            <h3>All Cities</h3>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr><th>City</th><th>Province</th><th>Doctors</th></tr>
+            </thead>
+            <tbody id="citiesTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- ADD/EDIT DOCTOR FORM MODAL -->
+  <div class="form-modal" id="doctorFormModal">
+    <div class="form-box">
+      <h3 id="formTitle">➕ Add New Doctor</h3>
+      <form id="doctorForm" class="form-grid">
+        <input type="hidden" id="doctorId" />
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" id="fName" placeholder="Dr. Example Khan" required />
+        </div>
+        <div class="form-group">
+          <label>Gender *</label>
+          <select id="fGender" required>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Specialty *</label>
+          <select id="fSpecialty" required></select>
+        </div>
+        <div class="form-group">
+          <label>City *</label>
+          <select id="fCity" required></select>
+        </div>
+        <div class="form-group full">
+          <label>Qualifications</label>
+          <input type="text" id="fQuals" placeholder="MBBS, FCPS (Specialty)" />
+        </div>
+        <div class="form-group">
+          <label>Experience (Years)</label>
+          <input type="number" id="fExp" min="0" max="60" value="5" />
+        </div>
+        <div class="form-group">
+          <label>Consultation Fee (PKR)</label>
+          <input type="number" id="fFee" min="0" step="50" value="1000" />
+        </div>
+        <div class="form-group full">
+          <label>Hospital / Clinic Name</label>
+          <input type="text" id="fHospital" placeholder="e.g. Shifa International Hospital" />
+        </div>
+        <div class="form-group">
+          <label>Area / Locality</label>
+          <input type="text" id="fArea" placeholder="e.g. F-11 Markaz" />
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="text" id="fPhone" placeholder="051-1234567" />
+        </div>
+        <div class="form-group">
+          <label>WhatsApp Number</label>
+          <input type="text" id="fWhatsapp" placeholder="923001234567" />
+        </div>
+        <div class="form-group">
+          <label>Timings</label>
+          <input type="text" id="fTimings" placeholder="10:00 AM – 2:00 PM" />
+        </div>
+        <div class="form-group full">
+          <label>Full Address</label>
+          <input type="text" id="fAddress" placeholder="Street / Block, City" />
+        </div>
+        <div class="form-group full">
+          <label>About / Bio</label>
+          <textarea id="fAbout" rows="3" placeholder="Brief description of the doctor's expertise…"></textarea>
+        </div>
+        <div class="form-group full" style="display:flex;align-items:center;gap:10px;">
+          <label style="margin:0;">Active Listing</label>
+          <label class="active-toggle">
+            <input type="checkbox" id="fActive" checked />
+            <span class="toggle-track"></span>
+            <span class="toggle-thumb"></span>
+          </label>
+        </div>
+      </form>
+      <div class="form-actions">
+        <button class="btn-cancel" id="cancelFormBtn">Cancel</button>
+        <button class="btn-save" id="saveFormBtn">💾 Save Doctor</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end adminDashboard -->
+
+<div class="toast" id="toast"></div>
+
+<script src="js/data.js"></script>
+<script src="data.js"></script>
+<script src="js/app.js"></script>
+<script src="app.js"></script>
+<script src="js/admin.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shifa Directory – Find Doctors in Pakistan</title>
+  <meta name="description" content="Shifa Directory helps you find qualified doctors by city and specialty across Pakistan. Search doctors in Lahore, Karachi, Islamabad, Peshawar and more." />
+  <link rel="stylesheet" href="css/main.css" />
+  <link rel="stylesheet" href="main.css" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0FA3A3" />
+  <link rel="apple-touch-icon" href="icon-192.png" />
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════
+     HEADER
+════════════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-icon">🏥</div>
+      <span class="logo-text">Shifa <span>Directory</span></span>
+    </a>
+
+    <div class="nav-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="navSearch" placeholder="Search doctor, specialty, hospital…" autocomplete="off" />
+      <div class="search-suggestions hidden" id="navSuggestions"></div>
+    </div>
+
+    <div class="header-actions">
+      <button class="emergency-btn" id="emergencyBtn">
+        <div class="pulse"></div> Emergency
+      </button>
+      <a href="favorites.html" class="fav-btn" title="Saved Doctors" style="position:relative;">
+        ❤️
+        <span class="fav-count" id="headerFavCount" style="display:none">0</span>
+      </a>
+      <a href="admin.html" class="admin-btn" title="Admin Panel">⚙️</a>
+    </div>
+  </div>
+</header>
+
+<!-- Emergency Modal -->
+<div class="modal-overlay hidden" id="emergencyModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>🚨 Emergency Numbers</h3>
+      <button class="modal-close" id="modalClose">✕</button>
+    </div>
+    <div class="emergency-list" id="emergencyList"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     HERO SEARCH
+════════════════════════════════════════════════ -->
+<section class="hero">
+  <h1 class="hero-title">Find the Right <span>Doctor</span> Near You</h1>
+  <p class="hero-subtitle">Trusted specialists across Pakistan — all in one place</p>
+
+  <div class="search-card">
+    <div class="search-row">
+      <div class="search-field">
+        <label for="heroCity">City</label>
+        <select id="heroCity">
+          <option value="">All Cities</option>
+        </select>
+      </div>
+      <div class="search-field">
+        <label for="heroSpecialty">Specialty</label>
+        <select id="heroSpecialty">
+          <option value="">All Specialties</option>
+        </select>
+      </div>
+      <button class="search-btn" id="heroSearchBtn">🔍 Search</button>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     POPULAR CITIES
+════════════════════════════════════════════════ -->
+<section class="cities-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Popular <span>Cities</span></h2>
+    </div>
+    <div class="cities-grid" id="citiesGrid"></div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     SPECIALTIES
+════════════════════════════════════════════════ -->
+<section class="specialties-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Browse by <span>Specialty</span></h2>
+    </div>
+    <div class="specialty-grid" id="specialtiesGrid"></div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════ -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="logo-icon" style="width:36px;height:36px;font-size:1.1rem;">🏥</div>
+          <span class="logo-text">Shifa <span>Directory</span></span>
+        </div>
+        <p>Connecting patients with qualified doctors across Pakistan. Find specialists by city and specialty, and get the care you deserve.</p>
+      </div>
+      <div>
+        <p class="footer-title">Quick Links</p>
+        <div class="footer-links">
+          <a href="index.html">Home</a>
+          <a href="results.html">Find Doctors</a>
+          <a href="favorites.html">Saved Doctors</a>
+          <a href="admin.html">Admin Panel</a>
+        </div>
+      </div>
+      <div>
+        <p class="footer-title">Specialties</p>
+        <div class="footer-links" id="footerSpecialties"></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2024 Shifa Directory. All rights reserved.</p>
+      <div class="disclaimer">⚠️ Information may change. Please confirm with the clinic before visiting.</div>
+    </div>
+  </div>
+</footer>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="js/data.js"></script>
+<script src="data.js"></script>
+<script src="js/app.js"></script>
+<script src="app.js"></script>
+<script src="js/home.js"></script>
+<script src="home.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').then(reg => {
+        console.log('Shifa PWA Service Worker registered:', reg.scope);
+      }).catch(err => {
+        console.log('Service Worker registration failed:', err);
+      });
+    });
+  }
+</script>
+</body>
+</html>
